@@ -8,14 +8,15 @@ exibir_menu() {
     echo "2. Instale o Docker."
     echo "3. Instale o Backstage CLI."
     echo "4. Gere sua chave SSH."
-    echo "5. Pacotes essenciais."
-    echo "6. Sair"
+    echo "5. Instalar VPN. (Instale o Docker antes.)"
+    echo "6. Pacotes essenciais."
+    echo "7. Sair"
 }
 
 executar_comandos() {
     for comando in "$@"; do
         echo "Executando: $comando"
-        eval "$comando" >/dev/null 2>&1
+        eval "$comando"
         if [ $? -ne 0 ]; then
             echo "Erro ao executar: $comando"
         fi
@@ -62,9 +63,31 @@ processar_opcao() {
             echo "Adicione um nome em "Title", cole sua chave gerada e clique em "Add key". Feito isso, você poderá clonar os repositórios da Editora, caso tenha acesso."
             ;;
         5)
-            essentials_packages
+            echo $'⚠️ Disclaimer: Para prosseguir, volte vá em "Pacotes essenciais e instale o ZSH!"\nAlém disso, certifique-se de ter configurado sua chave SSH no Github! ⚠️'
+            echo
+            echo "Clonando a VPN"
+            executar_comandos "git clone git@github.com:Infoglobo/vpn-eg.git"
+            echo "Repositório clonado com sucesso!"
+            echo
+            echo "Criando imagem da VPN. Aguarde 😉"
+            executar_comandos "sudo docker build -t vpn ." >/dev/null
+            echo
+            echo "Agora, vamos facilitar a sua conexão a VPN criando alguns "Alias"."
+            echo "Temos duas VPNs, tanto a Corp como a Remoto."
+            read -p "Para Remoto, dê um nome: " vpn_name
+            echo "alias "$vpn_name"='sudo docker run --rm -it --privileged --net=host --env VPN_SITE="RJ" -v /etc/resolv.conf:/etc/resolv.conf vpn'" >> ~/.zshrc
+            echo "Alias "$vpn_name" com sucesso!"
+            echo
+            read -p "Para Corp, dê um nome: " vpn_name
+            echo "alias "$vpn_name"='sudo docker run --rm -it --privileged --net=host --env VPN_SITE="GcomCorp" -v /etc/resolv.conf:/etc/resolv.conf vpn'" >> ~/.zshrc
+            echo "Alias "$vpn_name" com sucesso!"
+            echo
+            echo "Quando reiniciar seu bastar usar os alias escolhidos para conectar na vpn 😉"
             ;;
         6)
+            essentials_packages
+            ;;
+        7)
             echo "Saindo..."
             exit 0
             ;;
