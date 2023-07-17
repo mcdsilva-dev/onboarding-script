@@ -12,6 +12,7 @@ exibir_menu() {
     echo "6. Pacotes essenciais."
     echo "7. Programas essenciais."
     echo "8. Sair"
+    echo
 }
 
 executar_comandos() {
@@ -48,7 +49,7 @@ processar_opcao() {
             executar_comandos "sudo apt install curl" >/dev/null
             executar_comandos "sudo curl https://get.backstage.globoi.com/ | sh"
             echo
-            echo "Atualizações realizadas com sucesso."
+            echo "Backstage instalado com sucesso."
             ;;
         4)
             echo "Para gerar sua chave SSH:"
