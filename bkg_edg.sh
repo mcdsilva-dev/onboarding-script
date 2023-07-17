@@ -10,7 +10,8 @@ exibir_menu() {
     echo "4. Gere sua chave SSH."
     echo "5. Instalar VPN. (Instale o Docker antes.)"
     echo "6. Pacotes essenciais."
-    echo "7. Sair"
+    echo "7. Programas essenciais."
+    echo "8. Sair"
 }
 
 executar_comandos() {
@@ -88,6 +89,9 @@ processar_opcao() {
             essentials_packages
             ;;
         7)
+            essentials_programs
+            ;;
+        8)
             echo "Saindo..."
             exit 0
             ;;
@@ -154,6 +158,55 @@ essentials_packages() {
     esac
 }
 
+essentials_programs() {
+    clear
+    echo "Programas essenciais para desenvolvimento na Editora Globo."
+    echo
+    echo "Selecione uma opção abaixo:"
+    echo "1. Instalar Slack"
+    echo "2. Instalar Authy."
+    echo "3. Instalar Visual Studio Code."
+    echo "4. Voltar"
+
+    read -p "Digite o número da opção desejada: " subopcao
+    case $subopcao in
+        1)
+            echo "Instalando Slack..."
+            if ! dpkg -s snapd >/dev/null 2>&1; then
+                echo "Pacote Snap não está instalado. Instalando..."
+                executar_comandos "sudo apt install snapd" >/dev/null
+            fi
+            echo "Aguarde..."
+            executar_comandos "sudo snap install slack --classic" >/dev/null
+            echo "Instalação do Slack concluída."
+            ;;
+        2)
+            echo "Instalando Authy..."
+            if ! dpkg -s snapd >/dev/null 2>&1; then
+                echo "Pacote Snap não está instalado. Instalando..."
+                executar_comandos "sudo apt install snapd" >/dev/null
+            fi
+            echo "Aguarde..."
+            executar_comandos "sudo snap install authy --beta" >/dev/null
+            echo "Instalação do Authy concluída."
+            ;;
+        3)
+            echo "Instalando Visual Studio Code..."
+            if ! dpkg -s snapd >/dev/null 2>&1; then
+                echo "Pacote Snap não está instalado. Instalando..."
+                executar_comandos "sudo apt install snapd" >/dev/null
+            fi
+            echo "Aguarde..."
+            executar_comandos "sudo snap install code --classic" >/dev/null
+            echo "Instalação do Visual Studio Code concluída."
+            ;;
+        *)
+            echo "Opção inválida. Tente novamente."
+            submenu_docker
+            ;;
+    esac
+}
+
 submenu_docker() {
     clear
     echo "Configurações adicionais do Docker:"
@@ -179,9 +232,6 @@ submenu_docker() {
             ;;
     esac
 }
-
-
-
 
 while true; do
     exibir_menu
