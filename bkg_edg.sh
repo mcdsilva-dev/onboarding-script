@@ -74,35 +74,6 @@ processar_opcao() {
     esac
 }
 
-
-# Função de submenu do Docker
-
-submenu_docker() {
-    clear
-    echo "Configurações adicionais do Docker:"
-    echo "Selecione uma opção abaixo:"
-    echo "1. Criar arquivo em /etc/docker."
-    echo "2. Voltar"
-
-    read -p "Digite o número da opção desejada: " subopcao
-    case $subopcao in
-        1)
-            echo "Criando arquivo daemon.json em /etc/docker..."
-            echo -e '{\n    "bip": "172.26.0.1/16",\n    "fixed-cidr": "172.26.0.0/16"\n}' \
-            | sudo tee /etc/docker/daemon.json >/dev/null
-
-            echo "Arquivo /etc/docker/daemon.json criado com sucesso."
-            ;;
-        2)
-            echo "Voltando..."
-            ;;
-        *)
-            echo "Opção inválida. Tente novamente."
-            submenu_docker
-            ;;
-    esac
-}
-
 essentials_packages() {
     clear
     echo "Pacotes essenciais para desenvolvimento."
@@ -112,7 +83,8 @@ essentials_packages() {
     echo "2. Instalar Node."
     echo "3. Instalar NVM."
     echo "4. Instalar Virtual ENV."
-    echo "5. Voltar"
+    echo "5. Instalar ZSH (Recomendado)"
+    echo "6. Voltar"
 
     read -p "Digite o número da opção desejada: " subopcao
     case $subopcao in
@@ -142,12 +114,50 @@ essentials_packages() {
             echo
             echo "Instalação do VENV concluída."
             ;;
+        5)
+            echo "Instalando o ZSH."
+            executar_comandos "sudo apt install zsh -y"
+            echo
+            echo "Zsh instalado com sucesso!"
+            echo
+            echo -n "Em 10 segundos o shell será reiniciado, após isso execute novamente o script."
+            sleep 10
+            exec zsh
+            ;;
         *)
             echo "Opção inválida. Tente novamente."
             submenu_docker
             ;;
     esac
 }
+
+submenu_docker() {
+    clear
+    echo "Configurações adicionais do Docker:"
+    echo "Selecione uma opção abaixo:"
+    echo "1. Criar arquivo em /etc/docker."
+    echo "2. Voltar"
+
+    read -p "Digite o número da opção desejada: " subopcao
+    case $subopcao in
+        1)
+            echo "Criando arquivo daemon.json em /etc/docker..."
+            echo -e '{\n    "bip": "172.26.0.1/16",\n    "fixed-cidr": "172.26.0.0/16"\n}' \
+            | sudo tee /etc/docker/daemon.json >/dev/null
+
+            echo "Arquivo /etc/docker/daemon.json criado com sucesso."
+            ;;
+        2)
+            echo "Voltando..."
+            ;;
+        *)
+            echo "Opção inválida. Tente novamente."
+            submenu_docker
+            ;;
+    esac
+}
+
+
 
 
 while true; do
