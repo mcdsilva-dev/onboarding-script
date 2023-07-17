@@ -57,7 +57,8 @@ processar_opcao() {
             echo "Chave SSH gerada com sucesso. Pegue ela abaixo:"
             cat ~/.ssh/id_rsa.pub
             echo
-            echo $'Copie a chave completa acima incluindo seu e-mail\nfeito isso, vá ao gitlab no link abaixo\nhttps://gitlab.globoi.com/-/profile/keys'
+            echo "Copie a chave completa acima menos seu e-mail, feito isso, vá ao gitlab no link https://gitlab.globoi.com/-/profile/keys e no Github https://github.com/settings/keys, pode ser utilizado a mesma chave."
+            echo
             echo "Adicione um nome em "Title", cole sua chave gerada e clique em "Add key". Feito isso, você poderá clonar os repositórios da Editora, caso tenha acesso."
             ;;
         5)
